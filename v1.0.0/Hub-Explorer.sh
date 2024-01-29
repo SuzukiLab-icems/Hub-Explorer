@@ -85,7 +85,7 @@ function prep_go_annotation {
 }
 
 function config {
-	dir=$(pwd)"/Hub-Explorer_v1.0.0"
+	dir=$(pwd)"/v1.0.0" #You can frexibly change this directory.
 	gaf_file=$(basename ./${input_directory}/*.gaf.gz)
 	obo_file=$(basename ./${input_directory}/*.obo)
 	echo " "
