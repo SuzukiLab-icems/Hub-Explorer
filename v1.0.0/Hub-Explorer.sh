@@ -33,7 +33,7 @@
 #		|-goa_mouse.gaf.gz
 #		|-go-basic.obo
 #
-#If you want to change the directory, pls fix line.107 for your preference.
+#If you want to change the directory, pls fix line.108 for your preference.
 ###########################################################################
 
 input_directory=""
