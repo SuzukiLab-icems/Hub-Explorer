@@ -117,6 +117,7 @@ def exec(input_directory,n_cluster):
 	print('data processing..')
 	annotated_cluster, go2cluster = data_process(input_directory,n_cluster)
 	anno_table = prep_for_hub_visualization(input_directory)
+	anno_table.transpose().to_csv(f'./{input_directory}/out/result/summary_table_of_hub_components.csv')
 	print('visualization..')
 	gene_similarity_map(
 		input_directory, annotated_clustered = annotated_cluster, n_clusters=n_cluster, dendrogram=True, min=0, center=0.375, max=1.0, format_type='eps', show=False)
