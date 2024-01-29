@@ -4,15 +4,15 @@ Hub-Explorer v1.0.0 is an advanced bioinformatics toolset tailored for the ident
 
 ## Installation (developer's environment)
 ### Prerequisites:
-Python 3.8.12 
-Python libraries:
--NumPy v1.21.2
--pandas v1.5.3
--scipy v1.8.0
--biopython v1.80
--goatools v1.2.4
--sklearn v0.0.post1
--scanpy v1.9.2
+Python 3.8.12 \
+Python libraries:\
+-NumPy v1.21.2\
+-pandas v1.5.3\
+-scipy v1.8.0\
+-biopython v1.80\
+-goatools v1.2.4\
+-sklearn v0.0.post1\
+-scanpy v1.9.2\
 ### Steps:
 1. Clone the Hub-Explorer repository or download the ZIP file.
 2. Prepare for the directory for your analysis, containing 'gene_expression_matrix.csv', 'list_of_gene.csv', 'gene annotation_table.csv', 'goa_{species of target}.gaf.gz', and 'go-basic.obo'.
@@ -30,7 +30,7 @@ Options:
     -a FILE     	Specify the annotation table (CSV format)
     -o FILE     	Specify the GO annotation file (Manual: 'manual', Auto:'human' for Homo Sapiens, 'mouse' for Mus Musculus)
     -k VALUE    	Specify the number of clusters
-    -t VALUE		  Specify the NAME of targeted gene or None
+    -t VALUE		Specify the NAME of targeted gene or None
 ```
 
 ## Authors
