@@ -15,7 +15,7 @@ Python libraries:\
 -scanpy v1.9.2
 ### Steps:
 1. Clone the Hub-Explorer repository or download the ZIP file.
-2. Prepare for the directory for your analysis, containing 'gene_expression_matrix.csv', 'list_of_gene.csv', 'gene annotation_table.csv', 'goa_{species of target}.gaf.gz', and 'go-basic.obo'.
+2. Prepare for the directory for your analysis, containing 'gene_expression_matrix.csv', 'list_of_gene.csv', 'gene annotation_table.csv', 'goa_{species of target}.gaf.gz', and 'go-basic.obo'.\
 *You can automatically download 'goa_{species of target}.gaf.gz' and 'go-basic.obo'. However, please take care of file version used for analysis. Both files used for Cell Genomics (2024) were deposited to demo_data directory.
 3. Install the required Python libraries.
 
@@ -34,11 +34,11 @@ Options:
 ```
 
 ## Authors
-Noguchi Yuki (Jun Suzuki lab)
+Noguchi Yuki (Jun Suzuki lab)\
 Email: nyuhki21@gmail.com, jsuzuki@icems.kyoto-u.ac.jp
 
 ## Citation
-If you utilize Hub-Explorer in your research, please cite the following publication:
+If you utilize Hub-Explorer in your research, please cite the following publication:\
 Noguchi, Y., Onodera, Y., Maruoka, M., Miyamoto, T., Kosako, H., Suzuki, J. 2024. "In vivo CRISPR screening directly targeting testicular cells." Cell Genomics.
 
 ## License
