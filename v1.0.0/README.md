@@ -12,7 +12,7 @@ Python libraries:\
 -biopython v1.80\
 -goatools v1.2.4\
 -sklearn v0.0.post1\
--scanpy v1.9.2\
+-scanpy v1.9.2
 ### Steps:
 1. Clone the Hub-Explorer repository or download the ZIP file.
 2. Prepare for the directory for your analysis, containing 'gene_expression_matrix.csv', 'list_of_gene.csv', 'gene annotation_table.csv', 'goa_{species of target}.gaf.gz', and 'go-basic.obo'.
