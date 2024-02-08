@@ -49,6 +49,17 @@ Options:
 |Gene3|
 |•••••|
 
+3. annotation file (csv format)
+
+| Gene symbol | Uniprot ID  | ••• (* There is no problem if you add other columns) |
+| ----------- | ----------- | ---------- |
+| Xkr4        | Q5GH67      |••• |
+|•••          |•••          |••• |
+
+*You should use `Gene symbol` and `Uniprot ID`!
+*You can easy to get these file via scanpy object.
+*In `v1.0.0`, I used Uniprot ID for GO analysis with Goatools, but other ids are also available by changing Goatools command. (e.g., Ensemble gene_id etc..)
+
 ## Authors
 Noguchi Yuki (Jun Suzuki lab)\
 Email: nyuhki21@gmail.com, jsuzuki@icems.kyoto-u.ac.jp
