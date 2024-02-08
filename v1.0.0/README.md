@@ -34,6 +34,7 @@ Options:
 ```
 ### File Constructions:
 1. gene expression matrix file (csv format)
+
 | Cell Types  | Gene1       | Gene2      | ••• |
 | ----------- | ----------- | ---------- | --- |
 | 1           | expression  | expression | ••• |
@@ -41,6 +42,7 @@ Options:
 |•••          | •••         |•••         | ••• |
 
 2. gene list file (txt format)
+
 |Gene1|
 |-----|
 |Gene2|
