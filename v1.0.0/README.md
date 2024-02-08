@@ -32,13 +32,20 @@ Options:
     -k VALUE    	Specify the number of clusters
     -t VALUE		Specify the NAME of targeted gene or None
 ```
-###File Constructions:
--matrix file
+### File Constructions:
+1. gene expression matrix file (csv format)
 | Cell Types  | Gene1       | Gene2      | ••• |
 | ----------- | ----------- | ---------- | --- |
 | 1           | expression  | expression | ••• |
 | 2           | expression  | expression | ••• |
 |•••          | •••         |•••         | ••• |
+
+2. gene list file (txt format)
+|Gene1|
+|-----|
+|Gene2|
+|Gene3|
+|•••••|
 
 ## Authors
 Noguchi Yuki (Jun Suzuki lab)\
