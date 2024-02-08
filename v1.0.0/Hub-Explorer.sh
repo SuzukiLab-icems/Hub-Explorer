@@ -1,16 +1,15 @@
 #!/usr/sh
-
 ###########################################################################
 #Hub-Explorer_v1.0.0/Hub-Explorer.sh
 #
-#	 Copyright (c) 2024, Noguchi Yuki (Jun Suzuki lab)
-#	 This software is released under the MIT License, see LICENSE (https://opensource.org/license/mit/).
+#    Copyright (c) 2024, Noguchi Yuki (Jun Suzuki lab)
+#    This software is released under the MIT License, see LICENSE (https://opensource.org/license/mit/).
 #    @citation: Noguchi, Y., Onodera, Y., Maruoka, M., Miyamoto, T., Kosako, H., Suzuki., J. 2024. In vivo CRISPR screening directly targeting testicular cells. Cell Genomics.
 #    @author:  Noguchi Yuki
 #    @contact: nyuhki21@gmail.com,jsuzuki@icems.kyoto-u.ac.jp
 #
 ##REFERENCE
-#1.	Klopfenstein, D.V., Zhang, L., Pedersen, B.S., Ramírez, F., Warwick Vesztrocy, A., Naldi, A., Mungall, C.J., Yunes, J.M., Botvinnik, O.B., Weigel, M., et al. GOATOOLS: A Python library for Gene Ontology analyses. Scientific Reports. 2018; 8: 10872. 10.1038/s41598-018-28948-z
+#1.Klopfenstein, D.V., Zhang, L., Pedersen, B.S., Ramírez, F., Warwick Vesztrocy, A., Naldi, A., Mungall, C.J., Yunes, J.M., Botvinnik, O.B., Weigel, M., et al. GOATOOLS: A Python library for Gene Ontology analyses. Scientific Reports. 2018; 8: 10872. 10.1038/s41598-018-28948-z
 #
 ##CMD for generating figures
 #Figure.5E-5G: sh ./Hub-Explorer_v1.0.0/Hub-Explorer.sh -i IO -m mtx_from_Figure.4B-C_testicular_gene_expr_table_for_Figure.5.csv -l list_modified_from_Figure.5C_summary_table_of_spermatid_specific_RD3_interactors.csv -a annotation_file_from_scanpy_var.csv -o manual -k 4 -t Rd3
@@ -21,6 +20,7 @@
 #You can run Hub-Explorer by typing 'sh Hub-Explorer_v1.0.0/Hub-Explorer.sh -i demo_data -m demo_matrix.csv -l demo_list.csv -a annotation_file.csv -o manual -k 2 -t None' in 'Hub-Explorer' directory. Please type pwd and confirm your current directory is 'Hub-Explorer.'
 #
 #[Directory Architecture]
+#Please type `pwd`, then check your current directory is `./Hub-Explorer`.
 #Hub-Explorer
 #	|
 #	|-Hub-Explorer_v1.0.0
@@ -33,7 +33,7 @@
 #		|-goa_mouse.gaf.gz
 #		|-go-basic.obo
 #
-#If you want to change the directory, pls fix line.108 for your preference.
+#If you want to change the directory, pls fix line.113 for your preference.
 ###########################################################################
 
 input_directory=""
@@ -43,6 +43,7 @@ annotation_file=""
 go_annotation=""
 n_cluster=""
 
+#OPTIONS
 function usage {
     cat <<EOM
 Usage: $(basename "$0") [OPTION]...
@@ -58,16 +59,17 @@ EOM
     exit 2
 }
 
+#Parser
 function argparse {
     while getopts ":i:m:l:a:o:k:t:h" opt; do
         case "$opt" in
-			i) input_directory="${OPTARG}" ;;
+	    i) input_directory="${OPTARG}" ;;
             m) matrix_file="${OPTARG}" ;;
             l) list_file="${OPTARG}" ;;
             a) annotation_file="${OPTARG}" ;;
             o) go_annotation="${OPTARG}" ;;
             k) n_cluster="${OPTARG}" ;;
-			t) targeted_gene="${OPTARG}" ;;
+	    t) targeted_gene="${OPTARG}" ;;
             h) usage ;;
             \?) echo "Invalid option: -$OPTARG" >&2; usage ;;
             :)  echo "Option -$OPTARG requires an argument." >&2; exit 1 ;;
@@ -76,6 +78,8 @@ function argparse {
     shift "$((OPTIND - 1))"
 }
 
+#This function is designed for automatically downloading goa_<species>.gaf.gz and go-basic.obo files.
+#Just in case, this function tries to check whether you have installed wget command or not.
 function prep_go_annotation {
     if [ "${go_annotation}" = "manual" ]; then
         echo "Annotation file of GO analysis: MANUAL"
@@ -104,6 +108,7 @@ function prep_go_annotation {
     fi
 }
 
+#Call configuration.
 function config {
 	dir=$(pwd)"/v1.0.0" #You can frexibly change this directory.
 	gaf_file=$(basename ./${input_directory}/*.gaf.gz)
@@ -112,19 +117,20 @@ function config {
 	echo "Start Hub-Explorer.."
 	echo " "
 	echo "#####Configuration#####"
-	echo "version				:Hub-Explorer_v1.0.0"
+	echo "version			:Hub-Explorer_v1.0.0"
 	echo "package directory 	:${dir}"
 	echo "input directory 		:${input_directory}"
-	echo "matrix file 			:${matrix_file}"
-	echo "list file 			:${list_file}"
+	echo "matrix file 		:${matrix_file}"
+	echo "list file 		:${list_file}"
 	echo "annotation file 		:${annotation_file}"
-	echo "gaf file 				:${gaf_file}"
-	echo "obo file 				:${obo_file}"
+	echo "gaf file 			:${gaf_file}"
+	echo "obo file 			:${obo_file}"
 	echo "Number of Cluster		:${n_cluster}"
-	echo "Targeted Gene			:${targeted_gene}"
+	echo "Targeted Gene		:${targeted_gene}"
 	echo " "
 }
 
+#Execute Hub-Explorer
 function hub_explorer {
 	config
 	mkdir ${input_directory}/out ${input_directory}/out/result
@@ -139,6 +145,7 @@ function hub_explorer {
 		-t ${targeted_gene}
 }
 
+#Main function
 function main {
 	argparse "$@"
 	prep_go_annotation
