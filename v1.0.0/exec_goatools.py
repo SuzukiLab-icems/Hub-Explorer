@@ -54,7 +54,7 @@ def goatools(input_directory, annotation_file, gaf_file, go_file, GCN):
 	for gene in np.unique(GCN["gene_1"].to_list()):
 		df_corr = GCN[GCN["gene_1"] == gene]
 		list = df_corr.merge(annotation, how="left", on="Gene symbol")
-		list = list.dropna()["Uniprot ID"].tolist() #Have to deal with '0'
+		list = list.dropna()["Uniprot ID"].tolist() #Have to deal with '0' which indicates no annotated Uniprot ID in some genes.
 		study = {}
 		for x in list:
 			if x not in study:
