@@ -8,7 +8,7 @@
 #    @contact: nyuhki21@gmail.com,jsuzuki@icems.kyoto-u.ac.jp
 #
 ##REFERENCE
-#1.	Klopfenstein, D.V., Zhang, L., Pedersen, B.S., Ramírez, F., Warwick Vesztrocy, A., Naldi, A., Mungall, C.J., Yunes, J.M., Botvinnik, O.B., Weigel, M., et al. GOATOOLS: A Python library for Gene Ontology analyses. Scientific Reports. 2018; 8: 10872. 10.1038/s41598-018-28948-z
+#1.  Klopfenstein, D.V., Zhang, L., Pedersen, B.S., Ramírez, F., Warwick Vesztrocy, A., Naldi, A., Mungall, C.J., Yunes, J.M., Botvinnik, O.B., Weigel, M., et al. GOATOOLS: A Python library for Gene Ontology analyses. Scientific Reports. 2018; 8: 10872. 10.1038/s41598-018-28948-z
 ###########################################################################
 import os
 import shutil
@@ -18,6 +18,7 @@ from sklearn.cluster import AgglomerativeClustering
 from sklearn.cluster import KMeans
 from sklearn.metrics import jaccard_score
 
+#This script applies K-means method to input expression matrix, annotating classes to input matrix (=annotated_cluster).
 def generate_kmeans_clustered_matrix(input_directory, corr_matrix, n_cluster):
 	'''Define Model'''
 	Kmodel = KMeans(n_clusters=n_cluster, random_state=0, init='random')
@@ -35,7 +36,15 @@ def generate_kmeans_clustered_matrix(input_directory, corr_matrix, n_cluster):
                                      .sort_values(by="Cluster", ascending=False).set_index("index").rename(columns={"index":"Gene"})
 	annotated_cluster.to_csv(input_directory + '/out/clustered_matrix.csv')
 	return annotated_cluster, clustered, df_annotation
-    
+
+#This script adds hub_components to annotated_cluster (=go2cluster).
+"""
+go2cluster):
+	Gene	Cluster	 GO	        name	                        p_fdr_bh
+	Arf4	0	 GO:1990913	sperm head plasma membrane	0.002649793481474911
+	Arf4	0	 GO:0036128	CatSper complex	                0.002671119481328
+	•••	•••	 •••		•••				•••
+"""
 def preparation_for_finalization(input_directory, corr_matrix, hub_components, n_cluster):
     """file_preparation"""
     if os.path.isdir(input_directory + '/out/' + 'Module_GO/'): shutil.rmtree(input_directory + '/out/' + 'Module_GO/')
@@ -50,11 +59,12 @@ def preparation_for_finalization(input_directory, corr_matrix, hub_components, n
                         .sort_values(by="Cluster", ascending=True)
     return annotated_cluster, clustered, df_annotation, go2cluster
 
+#This fucntion extract 100% overlepped GO terms among each cluster.
 def overlapped_core_extraction(input_directory, corr_matrix, hub_components, n_cluster):
     annotated_cluster, clustered, df_annotation, go2cluster= preparation_for_finalization(input_directory, corr_matrix, hub_components, n_cluster)
     for module in np.unique(go2cluster["Cluster"].tolist()):
         go2cluster_module = go2cluster[go2cluster["Cluster"] == module]
-        gene_1 = go2cluster_module["Gene"].tolist()[0]
+        gene_1 = go2cluster_module["Gene"].tolist()[0] #Set gene_1 from the firist position, and GO terms from gene_1 and others are compare.
         x = go2cluster_module[go2cluster_module["Gene"] == gene_1]["GO"].tolist()
         opposite_list = go2cluster_module["Gene"].tolist()
         opposite_list.remove(gene_1)
@@ -64,17 +74,18 @@ def overlapped_core_extraction(input_directory, corr_matrix, hub_components, n_c
             y = go2cluster_module[go2cluster_module["Gene"] == gene_2]["GO"].tolist()
             shared = shared & set(y)
         if len(shared) != 0:
-            df_shared = pd.DataFrame(data=shared, columns=["GO"]) \
+            df_shared = pd.DataFrame(data=shared, columns=["GO"]) \ #df_shared is the summary of overlapped_hub (shared_GO_module{module}.csv) for choosing the interest of pathway.
                           .merge(hub_components.loc[:,["GO"]],how="left",on="GO") \
                           .groupby("GO").sum() \
                           .merge(hub_components.loc[:,["GO","name"]].drop_duplicates(),how="left",on="GO").loc[:,["GO","name"]]
             df_shared.to_csv(f'./{input_directory}/out/Module_GO/shared_GO_module{module}.csv')
         else:
             print(f'Module{module}: There is no shared GO')
-    go2cluster.to_csv(input_directory + '/out/' + "overlapped_hubs.csv")
+    go2cluster.to_csv(input_directory + '/out/' + "overlapped_hubs.csv") #go2cluster is used for downstream analysis.
     return annotated_cluster, clustered, df_annotation, go2cluster
 
-def finalization(input_directory, corr_matrix, hub_components, n_cluster):
+#This fucntion execute hub_classification.py
+def finalization(input_directory, corr_matrix, hub_components, n_cluster): #the input of corr_matrix is gene_similarity_matrix.
     annotated_cluster, clustered, df_annotation, go2cluster = overlapped_core_extraction(input_directory, corr_matrix, hub_components, n_cluster)
     go2cluster = go2cluster.loc[:,["Cluster","Gene","GO","name","p_fdr_bh"]]
     for module in np.unique(go2cluster["Cluster"].tolist()):
