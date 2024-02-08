@@ -56,8 +56,8 @@ Options:
 | Xkr4        | Q5GH67      |••• |
 |•••          |•••          |••• |
 
-*You should use `Gene symbol` and `Uniprot ID`!
-*You can easy to get these file via scanpy object.
+*You should use `Gene symbol` and `Uniprot ID`! \
+*You can easy to get these file via scanpy object. \
 *In `v1.0.0`, I used Uniprot ID for GO analysis with Goatools, but other ids are also available by changing Goatools command. (e.g., Ensemble gene_id etc..)
 
 ## Authors
