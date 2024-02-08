@@ -32,6 +32,13 @@ Options:
     -k VALUE    	Specify the number of clusters
     -t VALUE		Specify the NAME of targeted gene or None
 ```
+###File Constructions:
+-matrix file
+| Cell Types  | Gene1       | Gene2      | ••• |
+| ----------- | ----------- | ---------- | --- |
+| 1           | expression  | expression | ••• |
+| 2           | expression  | expression | ••• |
+|•••          | •••         |•••         | ••• |
 
 ## Authors
 Noguchi Yuki (Jun Suzuki lab)\
