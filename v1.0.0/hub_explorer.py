@@ -1,8 +1,8 @@
 ###########################################################################
 #Hub-Explorer_v1.0.0/hub_explorer.py
 #
-#	 Copyright (c) 2024, Noguchi Yuki (Jun Suzuki lab)
-#	 This software is released under the MIT License, see LICENSE (https://opensource.org/license/mit/).
+#    Copyright (c) 2024, Noguchi Yuki (Jun Suzuki lab)
+#    This software is released under the MIT License, see LICENSE (https://opensource.org/license/mit/).
 #    @citation: Noguchi, Y., Onodera, Y., Maruoka, M., Miyamoto, T., Kosako, H., Suzuki., J. 2024. In vivo CRISPR screening directly targeting testicular cells. Cell Genomics.
 #    @author:  Noguchi Yuki
 #    @contact: nyuhki21@gmail.com,jsuzuki@icems.kyoto-u.ac.jp
@@ -10,8 +10,6 @@
 ##REFERENCE
 #1.	Klopfenstein, D.V., Zhang, L., Pedersen, B.S., Ramírez, F., Warwick Vesztrocy, A., Naldi, A., Mungall, C.J., Yunes, J.M., Botvinnik, O.B., Weigel, M., et al. GOATOOLS: A Python library for Gene Ontology analyses. Scientific Reports. 2018; 8: 10872. 10.1038/s41598-018-28948-z
 ###########################################################################
-
-
 import os
 import glob
 import shutil
@@ -23,7 +21,9 @@ import scanpy as sc
 import hub_extraction
 import hub_classification
 
-def gene_similarity_map(input_directory, annotated_clustered,n_clusters,dendrogram,min,center,max,format_type,show):
+#For visualizing heatmap indicating the similarity among each gene.
+#For the next version, I will make this function generate more flexible figure size automatically. Current version is designed for generating Figure shown in Cell Genomics.
+def gene_similarity_map(input_directory, annotated_clustered, n_clusters, dendrogram, min, center, max, format_type, show):
     zeileis_colors = np.array(sc.pl.palettes.godsnot_102)
     col_colors = np.array(annotated_clustered["Cluster"]).astype("<U7")
     for color in np.arange(n_clusters):
@@ -53,6 +53,7 @@ def gene_similarity_map(input_directory, annotated_clustered,n_clusters,dendrogr
         plt.show()
     plt.close()
 
+#Generate the final table indicating gene x GOterms correspondence.
 def prep_for_hub_visualization(input_directory):
 	data_dir = glob.glob(input_directory + '/out/' + 'Module_Summary/Summary_module*.csv')
 	"""matrix_processing"""
@@ -90,6 +91,8 @@ def prep_for_hub_visualization(input_directory):
 	anno_table = frame.drop("Cluster", axis=1).set_index("name")
 	return anno_table
 
+#Visualize the final table.
+#For the next version, I will make this function generate more flexible figure size automatically. Current version is designed for generating Figure shown in Cell Genomics.
 def hub_visualization(input_directory, anno_table):
 		sns.set(style="ticks",
 			font_scale=2.5,
@@ -107,12 +110,17 @@ def hub_visualization(input_directory, anno_table):
 		plt.savefig(f'./{input_directory}/out/result/summary_table_of_hub_components.png',format='png',dpi=300)
 		plt.close()
 
+#This `data_process` function is the core function 
+#for 1.extracting significant GO terms(=hub_components) from analysis of goatools
+#    2.calculating similarity among genes according to hub_components
+#    3.clustering genes with K-means method according to the each similartity
 def data_process(input_directory,n_cluster):
-	hub_components = hub_extraction.extract_hub_components(input_directory)
-	gene_similarity_matrix = hub_extraction.generate_gene_similarity_matrix(input_directory, hub_components)
-	annotated_cluster, clustered, df_annotation, go2cluster = hub_classification.finalization(input_directory,gene_similarity_matrix,hub_components,n_cluster)
+	hub_components = hub_extraction.extract_hub_components(input_directory) #1: See hub_extraction.py for more details
+	gene_similarity_matrix = hub_extraction.generate_gene_similarity_matrix(input_directory, hub_components) #2: See hub_extraction.py for more details
+	annotated_cluster, clustered, df_annotation, go2cluster = hub_classification.finalization(input_directory,gene_similarity_matrix,hub_components,n_cluster) #3: See hub_classification.py for more details
 	return annotated_cluster, go2cluster
 
+#Execute hub_explorer.py
 def exec(input_directory,n_cluster):
 	print('data processing..')
 	annotated_cluster, go2cluster = data_process(input_directory,n_cluster)
